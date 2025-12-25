@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎄 聖誕樂透抽獎小工具</title>
+    <meta name="description" content="聖誕版本的抽獎小工具：貼上名單，一鍵抽出得獎者。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="lights" aria-hidden="true"></div>
+    <canvas id="snow" class="snow" aria-hidden="true"></canvas>
+
+    <header class="header">
+      <div class="brand">
+        <div class="badge" aria-hidden="true">🎅</div>
+        <div class="title-wrap">
+          <h1 class="title">聖誕樂透抽獎</h1>
+          <p class="subtitle">貼上名單 → 一鍵抽出幸運兒（很酷的那種）</p>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-label">候選人數</div>
+          <div class="stat-value" id="statCandidates">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">已中獎</div>
+          <div class="stat-value" id="statWinners">0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">可抽</div>
+          <div class="stat-value" id="statRemaining">0</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card">
+        <div class="card-head">
+          <h2 class="card-title">名單輸入</h2>
+          <div class="chip-row">
+            <label class="chip">
+              <input id="dedupe" type="checkbox" checked />
+              去除重複
+            </label>
+            <label class="chip">
+              <input id="ignoreWinners" type="checkbox" checked />
+              排除已中獎
+            </label>
+            <label class="chip">
+              <input id="stripAt" type="checkbox" checked />
+              自動補上 @
+            </label>
+          </div>
+        </div>
+
+        <textarea
+          id="inputList"
+          class="textarea"
+          placeholder="例如：&#10;@cococonuttt_&#10;@yyyun_ru__&#10;@yita_0325&#10;..."
+          spellcheck="false"
+        ></textarea>
+
+        <div class="actions">
+          <div class="draw-row">
+            <button id="btnDrawOne" class="btn primary">抽 1 人</button>
+            <div class="draw-n">
+              <label class="label" for="drawCount">抽</label>
+              <input id="drawCount" class="input" type="number" min="1" value="3" />
+              <span class="label">人</span>
+              <button id="btnDrawN" class="btn">抽多名</button>
+            </div>
+          </div>
+
+          <div class="tool-row">
+            <button id="btnShuffle" class="btn ghost">洗牌動畫</button>
+            <button id="btnClearWinners" class="btn ghost">清空中獎</button>
+            <button id="btnResetAll" class="btn danger ghost">全部重置</button>
+          </div>
+        </div>
+
+        <p class="hint">
+          小提示：每行一個帳號；可貼上有/沒有 @ 的內容；空行會自動忽略。
+        </p>
+      </section>
+
+      <section class="card result">
+        <div class="card-head">
+          <h2 class="card-title">抽獎舞台</h2>
+          <div class="mini-actions">
+            <button id="btnCopyLast" class="btn tiny">複製最後得獎者</button>
+            <button id="btnCopyAll" class="btn tiny">複製所有中獎</button>
+          </div>
+        </div>
+
+        <div class="stage" aria-live="polite" aria-atomic="true">
+          <div class="stage-top">
+            <div class="stage-label">現在抽出</div>
+            <div class="stage-status" id="stageStatus">等待開始…</div>
+          </div>
+
+          <div class="winner" id="winnerDisplay">
+            <div class="winner-name" id="winnerName">🎁</div>
+            <div class="winner-sub" id="winnerSub">按下「抽 1 人」或「抽多名」</div>
+          </div>
+
+          <div class="ticker" id="ticker" aria-hidden="true"></div>
+        </div>
+
+        <div class="history">
+          <div class="history-head">
+            <h3 class="history-title">中獎紀錄</h3>
+            <div class="history-meta">
+              <span id="historyCount">0</span> 筆
+            </div>
+          </div>
+          <ol class="history-list" id="historyList"></ol>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Made for Christmas lottery vibes.</span>
+      <span class="sep">•</span>
+      <span>離線可用（純前端）。</span>
+    </footer>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
+
+
